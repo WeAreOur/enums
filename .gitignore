@@ -1,0 +1,11 @@
+# Package managers
+package-lock.json
+bun.lockb
+pnpm-lock.yaml
+yarn.lock
+
+# Modules
+node_modules
+
+# Filesytem
+.DS_Store

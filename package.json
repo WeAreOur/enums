@@ -1,0 +1,35 @@
+{
+  "name": "@weareour/enums",
+  "version": "1.0.0",
+  "description": "A TS implementation of enums",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WeAreOur/enums.git"
+  },
+  "keywords": [
+    "enum",
+    "enums",
+    "typescript"
+  ],
+  "author": "WEAREOUR TECH LTD",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/WeAreOur/enums/issues"
+  },
+  "homepage": "https://github.com/WeAreOur/enums#readme",
+  "scripts": {
+    "prod": "rm -rf ./lib && tsc --target ESNext --module ESNext --declaration --outDir ./lib --strict ./src/index.ts"
+  },
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
