@@ -17,20 +17,18 @@ If you are migrating away from using `enum` in TypeScript, this library makes it
 
 The enum definition:
 
-```ts
-export enum Colors { RED, GREEN, BLUE }
-```
-update it to:
-```ts
-import { TsEnum, type EnumMembers } from '@weareour/enums';
+```diff
++ import { TsEnum, type EnumMembers } from '@weareour/enums';
 
-export const Colors = TsEnum(['RED', 'GREEN', 'BLUE'] as const);
-export type ColorsEnum = EnumMembers<typeof Colors>;
+- export enum Colors { RED, GREEN, BLUE }
++ export const Colors = TsEnum(['RED', 'GREEN', 'BLUE'] as const);
++ export type ColorsEnum = EnumMembers<typeof Colors>;
 ```
 
 Then search for the uses of the enum as a type `: Colors` and replace with:
-```ts
-  color: ColorsEnum,
+```diff
+-  color: Colors,
++  color: ColorsEnum,
 ```
 There's also a type to extract the names if you need them:
 ```ts
@@ -38,30 +36,19 @@ export type ColorNames = EnumNames<typeof Colors>;
 ```
 
 Then search for the usage `Colors[` like:
-```ts
-Colors[Colors.RED] // Returns 'RED'
-```
-and replace with:
-```ts
-Colors.RED.name() // Returns 'RED'
+```diff
+- Colors[Colors.RED] // Returns 'RED'
++ Colors.RED.name() // Returns 'RED', use only if you need the string
 ```
 And for the usage inside `for` loops:
-```ts
-for (const color in Colors) { // color is 'RED'
-  Colors[color] // Returns 0
-```
-replace with:
-```ts
-for (const color of Colors.values()) { // color is 'RED'
-  Colors[color].ordinal() // Returns 0
+```diff
+- for (const color in Colors) { // color is 'RED'
++ for (const color of Colors.values()) { // color is 'RED'
+-  Colors[color] // Returns 0
++  Colors[color].ordinal() // Returns 0, use only if you need the number
 ```
 
-Finally, if you manage to not have any usage of `.name()` or `.ordinal()`, then you don't need this library at all. Just add `Symbol()` as the value for all your keys to guarantee uniqueness.
-
-```ts
-const S = Symbol;
-export const Colors = { RED: S(), GREEN: S(), BLUE: S() } as const;
-```
+Finally, if you manage to not have any usage of `.name()` or `.ordinal()`, then you don't need this library at all.
 
 ## Intended Usage
 
