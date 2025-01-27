@@ -5,18 +5,24 @@ type JavaComparable = {
 type JavaSerializable = {
     toString(): string;
 };
-type JavaEnumMember<U> = JavaComparable & JavaSerializable & {
-    equals(other: JavaEnumMember<U>): boolean;
+type JavaEnumMember<K, U> = JavaComparable & JavaSerializable & {
+    equals(other: JavaEnumMember<K, U>): boolean;
+    name: () => K;
     value: () => U;
 };
 type JavaEnumClass<T extends readonly string[]> = {
     values: () => T;
 };
-type EnumMemberType<U> = U & JavaEnumMember<U>;
+type EnumMemberType<T, U> = {
+    valueOf: () => U;
+} & JavaEnumMember<T, U>;
 type EnumType<T extends readonly string[], U> = {
-    [K in T[number]]: EnumMemberType<U>;
+    [K in T[number]]: EnumMemberType<K, U>;
 } & JavaEnumClass<T> & {
-    sort: (values: EnumMemberType<U>[]) => EnumMemberType<U>[];
+    sort: (values: EnumMemberType<T[number], U>[]) => EnumMemberType<T[number], U>[];
 };
-export declare function Enum<U extends JavaSerializable>(getValue: (key: string) => U): <T extends readonly string[]>(values: T) => EnumType<T, U>;
+export declare function Enum<U extends JavaSerializable>(getValue: (key: string, index: number) => U): <T extends readonly string[]>(values: T) => EnumType<T, U>;
+export declare const TsEnum: <T extends readonly string[]>(values: T) => EnumType<T, symbol>;
+export type EnumNames<T> = T extends EnumType<infer K, infer V> ? K[number] : never;
+export type EnumMembers<T> = T extends EnumType<infer K, infer V> ? T[K[number]] : never;
 export {};
